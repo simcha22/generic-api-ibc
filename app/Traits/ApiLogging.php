@@ -10,7 +10,6 @@ trait ApiLogging{
 
     protected function genericRequest($request, $type){
 
-
         if($type == 'generic'){
             $user_id = Auth::user()->id;
         }else if($type == 'open'){
@@ -51,16 +50,26 @@ trait ApiLogging{
     }
 
     protected function genericResponse($response){
-
+        Log::info(' api.InternalAPIUserGroupAccess - generic response: result=SUCCESS.');
     }
 
-    protected function genericNotFindError( $auditId){
+    protected function genericNotFindError($auditId){
         log::error('Could not find generic');
 
         AuditLog::where('id', $auditId)->update([
             'request_state' => 2,
             'response' => null,
             'error_msg'=> 'Could not find generic. Please see log for more information',
+        ]);
+    }
+
+    protected function genericNotRunError($auditId){
+        log::error('Failed to run query. Please see log for more information');
+
+        AuditLog::where('id', $auditId)->update([
+            'request_state' => 2,
+            'response' => null,
+            'error_msg'=> 'Failed to run query. Please see log for more information',
         ]);
     }
 }

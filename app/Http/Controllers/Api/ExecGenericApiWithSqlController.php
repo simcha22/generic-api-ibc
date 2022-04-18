@@ -7,21 +7,23 @@ use App\Http\Requests\Api\ExecGenericApiWithSqlRequest;
 use App\Models\GenericApi;
 use App\Services\ExecGenericApi;
 use App\Traits\ApiLogging;
+use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
 class ExecGenericApiWithSqlController extends Controller
 {
-    use ApiLogging;
+    use ApiLogging, ApiResponser;
 
-    public function index(ExecGenericApiWithSqlRequest $request, ExecGenericApi $execGenericApi){
-
+    public function index(ExecGenericApiWithSqlRequest $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
+    {
+        $startTime = microtime(true);
         $auditLog = $this->genericRequest($request, 'generic');
 
         // get the generic from t_adm_generic_api_conf table
         $generic = GenericApi::where('api_name', $request->apiName)->first();
         if(!$generic) {
             $this->genericNotFindError($auditLog->id);
-            return;
+            return $this->failedGeneric($request->ip(), number_format(microtime(true) - $startTime));
         }
 
         // replace wildcards into the query
@@ -39,6 +41,11 @@ class ExecGenericApiWithSqlController extends Controller
         $result = $execGenericApi->runQuery($query, $generic->query_type, $auditLog->id);
 
         // make response ..
-        dd($result);
+        if($result) {
+            return $this->successGeneric($request->ip(), $result, number_format(microtime(true) - $startTime));
+        }else{
+            $this->genericNotRunError($auditLog->id);
+            return $this->failedGeneric($request->ip(), number_format(microtime(true) - $startTime));
+        }
     }
 }

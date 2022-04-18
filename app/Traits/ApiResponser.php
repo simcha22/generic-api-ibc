@@ -23,8 +23,8 @@ trait ApiResponser
             ], $code);
         }
 
-        protected function successLogin($ip, $user, $token, $code){
-
+        protected function successLogin($ip, $user, $token, $code): \Illuminate\Http\JsonResponse
+        {
             Log::info('api.GeneralAPI - login response: result=SUCCESS, clientAddress='.$ip.', userId=' . $user->id);
             return response()->json([
                 'clientAddress' => $ip,
@@ -41,13 +41,40 @@ trait ApiResponser
             ], $code);
         }
 
-        protected function successLogout($ip, $code){
+        protected function successLogout($ip, $code): \Illuminate\Http\JsonResponse
+        {
 
             return response()->json([
                 'clientAddress' => $ip,
                 'message' => null,
                 'result' => "SUCCESS",
             ], $code);
-
         }
+
+        protected function successGeneric($ip, $data, $time): \Illuminate\Http\JsonResponse
+        {
+            Log::info('api.InternalAPIUserGroupAccess - generic response: result=SUCCESS. Execution time of generic API in milliseconds: ' . $time);
+            return response()->json([
+                'clientAddress' => $ip,
+                'columnList' => (is_array($data)? array_keys(get_object_vars($data[0])): null),
+                'data' => (is_array($data) ? $data: null),
+                'message' => null,
+                'result' => "SUCCESS",
+                'rowsAffected' => 0,
+            ], 200);
+        }
+
+        protected function failedGeneric($ip, $time): \Illuminate\Http\JsonResponse
+        {
+            Log::info('api.InternalAPIUserGroupAccess - generic response: result=FAILED, message=Failed to run query. Please see log for more information. Execution time of generic API in milliseconds: '. $time);
+            return response()->json([
+                'clientAddress' => $ip,
+                'columnList' => null,
+                'data' => null,
+                'message' => 'Failed to run query. Please see log for more information',
+                'result' => 'FAILED',
+                'rowsAffected' => 0,
+            ], 200);
+        }
+
     }

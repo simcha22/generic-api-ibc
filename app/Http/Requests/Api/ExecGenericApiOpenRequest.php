@@ -24,7 +24,7 @@ class ExecGenericApiOpenRequest extends FormRequest
     public function rules()
     {
         return [
-            'apiName' => ['required', 'string', 'exists:t_adm_generic_api_conf,api_name'],
+            'apiName' => ['required', 'string', 'exists:t_adm_open_generic_api_conf,api_name'],
             'wildcards' => ['array'],
         ];
     }

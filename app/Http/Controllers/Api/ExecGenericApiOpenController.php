@@ -7,30 +7,28 @@ use App\Http\Requests\Api\ExecGenericApiOpenRequest;
 use App\Models\GenericApiOpen;
 use App\Services\ExecGenericApi;
 use App\Traits\ApiLogging;
+use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
 class ExecGenericApiOpenController extends Controller
 {
-    use ApiLogging;
+    use ApiLogging, ApiResponser;
 
-    public function index(ExecGenericApiOpenRequest $request, ExecGenericApi $execGenericApi){
-
+    public function index(ExecGenericApiOpenRequest $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
+    {
+        $startTime = microtime(true);
         // log info generic
         $auditLog = $this->genericRequest($request, 'open');
 
         // get the generic from t_adm_generic_api_conf table
-            $generic = GenericApiOpen::where('api_name', $request->apiName)->first();
-            if(!$generic) {
-                $this->genericNotFindError($auditLog->id);
-                return;
-            }
+        $generic = GenericApiOpen::where('api_name', $request->apiName)->first();
+        if(!$generic) {
+            $this->genericNotFindError($auditLog->id);
+            return $this->failedGeneric($request->ip(), number_format(microtime(true) - $startTime));
+        }
 
         // replace wildcards into the query
         $query = $execGenericApi->makeQuery($request->wildcards, $generic->query_syntax);
-
-        // replace user group if exists
-        // please Check if Do you need it in open generic api
-        //$query = $execGenericApi->userGroupToQuery($query, $generic->user_group_based);
 
         // log debug query
         $this->genericRunQuery($query, $request->apiName);
@@ -39,6 +37,11 @@ class ExecGenericApiOpenController extends Controller
         $result = $execGenericApi->runQuery($query, $generic->query_type, $auditLog->id);
 
         // make response ..
-        dd($result);
+        if($result) {
+            return $this->successGeneric($request->ip(), $result, number_format(microtime(true) - $startTime));
+        }else{
+            $this->genericNotRunError($auditLog->id);
+            return $this->failedGeneric($request->ip(), number_format(microtime(true) - $startTime));
+        }
     }
 }

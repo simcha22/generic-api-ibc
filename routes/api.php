@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//,'user_confirmation'
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -27,3 +27,4 @@ Route::middleware(['auth:sanctum','user_confirmation'])->group(function () {
 
 Route::post('/login', [\App\Http\Controllers\Auth\AuthController::class, 'store']);
 Route::post('/generic/open', [\App\Http\Controllers\Api\ExecGenericApiOpenController::class, 'index']);
+Route::post('/generic/open/with_sql', [\App\Http\Controllers\Api\ExecGenericApiOpenWithSqlController::class, 'index']);
