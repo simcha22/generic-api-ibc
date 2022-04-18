@@ -20,6 +20,7 @@ class AuditLog extends Model
         'response',
         'error_msg',
         ];
+
     protected $table = 'pa_appsrv_audit_log';
 
     public $timestamps = false;

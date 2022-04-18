@@ -23,9 +23,7 @@ class User extends Authenticatable
         'description',
         'blocked',
         'email',
-        'password',
     ];
-    public $timestamps = false;
 
     protected $table = 'pa_users';
     /**

@@ -16,6 +16,8 @@ class groups extends Model
 
     protected $primaryKey = 'ug_gid';
 
+    public $timestamps = false;
+
     protected $table = 'pa_user_to_groups';
 
     public function user()

@@ -35,7 +35,7 @@ trait ApiLogging{
 
 
        return AuditLog::create([
-            'request_time' => '',
+            'request_time' => now(),
             'request_type' => $type == 'open'? 18: 10,
             'request_state' => 1,
             'user_id' => $user_id,

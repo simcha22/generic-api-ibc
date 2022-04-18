@@ -18,4 +18,6 @@ class GenericApi extends Model
         'allowed_by_admin'
     ];
     protected $table = 't_adm_generic_api_conf';
+
+    public $timestamps = false;
 }

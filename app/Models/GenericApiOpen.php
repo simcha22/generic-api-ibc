@@ -16,4 +16,6 @@ class GenericApiOpen extends Model
     ];
 
     protected $table = 't_adm_open_generic_api_conf';
+
+    public $timestamps = false;
 }

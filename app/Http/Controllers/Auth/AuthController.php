@@ -16,7 +16,6 @@ class AuthController extends Controller
 
     public  function store(LoginRequest $request)
     {
-
         // Check user and password
         $user = User::with('groups')->where('user_name', $request->user_name)
             ->where('password', md5($request->user_name . $request->password))
@@ -29,7 +28,7 @@ class AuthController extends Controller
             return $this->rejected($request->ip(), 200);
         }
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $token = $user->createToken('genericApiToken')->plainTextToken;
 
         return $this->successLogin($request->ip(), $user, $token, 201);
     }
