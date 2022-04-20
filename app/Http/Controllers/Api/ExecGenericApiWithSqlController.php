@@ -8,15 +8,19 @@ use App\Models\GenericApi;
 use App\Services\ExecGenericApi;
 use App\Traits\ApiLogging;
 use App\Traits\ApiResponser;
+use App\Traits\ApiValidation;
 use Illuminate\Http\Request;
 
 class ExecGenericApiWithSqlController extends Controller
 {
-    use ApiLogging, ApiResponser;
+    use ApiLogging, ApiResponser, ApiValidation;
 
-    public function index(ExecGenericApiWithSqlRequest $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
+    public function index(Request $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
     {
         $startTime = microtime(true);
+        if(!$this->genericApiWithSqlOpenValidation($request)){
+            return $this->failedValidation($request->ip(), number_format(microtime(true) - $startTime));
+        }
         $auditLog = $this->genericRequest($request, 'generic');
 
         // get the generic from t_adm_generic_api_conf table

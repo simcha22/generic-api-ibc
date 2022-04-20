@@ -77,4 +77,17 @@ trait ApiResponser
             ], 200);
         }
 
+        protected function failedValidation($ip, $time): \Illuminate\Http\JsonResponse
+        {
+            Log::info('api.InternalAPIUserGroupAccess - generic response: result=FAILED, message=Validation error on the data . Please see log for more information. Execution time of generic API in milliseconds: '. $time);
+            return response()->json([
+                'clientAddress' => $ip,
+                'columnList' => null,
+                'data' => null,
+                'message' => 'Validation error on the data. Please see log for more information',
+                'result' => 'FAILED',
+                'rowsAffected' => 0,
+            ], 422);
+        }
+
     }

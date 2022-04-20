@@ -9,14 +9,19 @@ use App\Services\ExecGenericApi;
 use App\Traits\ApiLogging;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Traits\ApiValidation;
 
 class ExecGenericApiOpenController extends Controller
 {
-    use ApiLogging, ApiResponser;
+    use ApiLogging, ApiResponser, ApiValidation;
 
-    public function index(ExecGenericApiOpenRequest $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
+    public function index(Request $request, ExecGenericApi $execGenericApi): \Illuminate\Http\JsonResponse
     {
         $startTime = microtime(true);
+
+        if(!$this->genericApiOpenValidation($request)){
+            return $this->failedValidation($request->ip(), number_format(microtime(true) - $startTime));
+        }
         // log info generic
         $auditLog = $this->genericRequest($request, 'open');
 
