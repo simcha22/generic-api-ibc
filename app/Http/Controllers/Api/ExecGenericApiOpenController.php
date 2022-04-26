@@ -23,6 +23,7 @@ class ExecGenericApiOpenController extends Controller
             return $this->failedValidation($request->ip(), number_format(microtime(true) - $startTime));
         }
         // log info generic
+
         $auditLog = $this->genericRequest($request, 'open');
 
         // get the generic from t_adm_generic_api_conf table

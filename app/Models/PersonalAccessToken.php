@@ -12,8 +12,8 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
 
     protected $dates = ['last_used_at'];
 
-//     public function getDateFormat()
-//     {
-//         return 'd/m/Y h:i:s';
-//     }
+     public function getDateFormat()
+     {
+         return 'd/m/Y h:i:s';
+     }
 }

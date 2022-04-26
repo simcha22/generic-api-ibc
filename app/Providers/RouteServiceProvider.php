@@ -29,7 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('ipa/apis/json')
+            Route::prefix(env("APP_API_PATH"))
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
 
