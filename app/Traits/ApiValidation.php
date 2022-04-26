@@ -12,8 +12,8 @@ trait ApiValidation
     protected function genericApiValidation($request): bool
     {
         $validator = Validator::make($request->all() ,[
-            'user_name' => ['required', 'string', 'exists:pa_users,user_name'],
-            'password' => ['required', 'string'],
+//            'username' => ['required', 'string', 'exists:pa_users,user_name'],
+//            'password' => ['required', 'string'],
             'apiName' => ['required', 'string', 'exists:t_adm_generic_api_conf,api_name'],
             'wildcards' => ['array'],
         ]);
@@ -30,8 +30,8 @@ trait ApiValidation
     protected function genericApiWithSqlValidation($request): bool
     {
         $validator = Validator::make($request->all() ,[
-            'user_name' => ['required', 'string', 'exists:pa_users,user_name'],
-            'password' => ['required', 'string'],
+//            'username' => ['required', 'string', 'exists:pa_users,user_name'],
+//            'password' => ['required', 'string'],
             'apiName' => ['required', 'string', 'exists:t_adm_generic_api_conf,api_name'],
             'wildcards' => ['array'],
             'sqlwildcards' => ['array'],

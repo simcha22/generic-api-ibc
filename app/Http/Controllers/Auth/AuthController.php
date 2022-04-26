@@ -17,12 +17,12 @@ class AuthController extends Controller
     public  function store(LoginRequest $request)
     {
         // Check user and password
-        $user = User::with('groups')->where('user_name', $request->user_name)
-            ->where('password', md5($request->user_name . $request->password))
+        $user = User::with('groups')->where('user_name', $request->username)
+            ->where('password', md5($request->username . $request->password))
             ->where('blocked', '0')
             ->first();
 
-        Log::info('api.GeneralAPI - login request: username='.$request->user_name.', clientAddress='.$request->ip());
+        Log::info('api.GeneralAPI - login request: username='.$request->username.', clientAddress='.$request->ip());
         if (!$user) {
             Log::debug('control.WSGeneralAPIMgr - Invalid password for user simcha');
             return $this->rejected($request->ip(), 200);

@@ -13,18 +13,19 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//,'user_confirmation'
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum','user_confirmation'])->group(function () {
-    Route::post('/generic', [\App\Http\Controllers\Api\ExecGenericApiController::class, 'index']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/internal/generic/v2', [\App\Http\Controllers\Api\ExecGenericApiController::class, 'index']);
     Route::post('/generic/with_sql', [\App\Http\Controllers\Api\ExecGenericApiWithSqlController::class, 'index']);
-    Route::post('/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
+    Route::post('/general/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
 });
 
-Route::post('/login', [\App\Http\Controllers\Auth\AuthController::class, 'store']);
-Route::post('/generic/open', [\App\Http\Controllers\Api\ExecGenericApiOpenController::class, 'index']);
-Route::post('/generic/open/with_sql', [\App\Http\Controllers\Api\ExecGenericApiOpenWithSqlController::class, 'index']);
+Route::post('/general/login', [\App\Http\Controllers\Auth\AuthController::class, 'store']);
+Route::post('/internal/generic/v2/open', [\App\Http\Controllers\Api\ExecGenericApiOpenController::class, 'index']);
+Route::post('/internal/generic/open/with_sql', [\App\Http\Controllers\Api\ExecGenericApiOpenWithSqlController::class, 'index']);
+
