@@ -10,6 +10,7 @@ use App\Traits\ApiLogging;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Traits\ApiValidation;
+use Illuminate\Support\Facades\Log;
 
 class ExecGenericApiOpenController extends Controller
 {
@@ -43,9 +44,13 @@ class ExecGenericApiOpenController extends Controller
         $result = $execGenericApi->runQuery($query, $generic->query_type, $auditLog->id);
 
         // make response ..
+        // if(is_array($result)){}
         if($result) {
             return $this->successGeneric($request->ip(), $result, number_format(microtime(true) - $startTime));
-        }else{
+        }elseif (empty($result)){
+            return $this->successGeneric($request->ip(), $result, number_format(microtime(true) - $startTime));
+        }
+        else{
             $this->genericNotRunError($auditLog->id);
             return $this->failedGeneric($request->ip(), number_format(microtime(true) - $startTime));
         }

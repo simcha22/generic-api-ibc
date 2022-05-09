@@ -56,8 +56,8 @@ trait ApiResponser
             Log::info('api.InternalAPIUserGroupAccess - generic response: result=SUCCESS. Execution time of generic API in milliseconds: ' . $time);
             return response()->json([
                 'clientAddress' => $ip,
-                'columnList' => (is_array($data)? array_keys(get_object_vars($data[0])): null),
-                'data' => (is_array($data) ? $data: null),
+                'columnList' => (is_array($data) && !empty($data)? array_keys(get_object_vars($data[0])): null),
+                'data' => (is_array($data) && !empty($data) ? $data: null),
                 'message' => null,
                 'result' => "SUCCESS",
                 'rowsAffected' => 0,
