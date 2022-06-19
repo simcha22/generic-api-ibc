@@ -43,7 +43,11 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return $request->expectsJson()
-            ? response()->json(['message' =>'error message '],401)
+            ? response()->json(['clientAddress' => $request->ip(),
+                'columnList' => null,
+                'data' => null,
+                'message' => 'Failed to run query. Access denied',
+                'result' => 'FAILED'],401)
             : response()->json(['message' =>'is ok '], 200);
     }
 }

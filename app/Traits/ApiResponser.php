@@ -23,6 +23,17 @@ trait ApiResponser
             ], $code);
         }
 
+        protected function responseOtpSuccess($ip, $code)
+        {
+            Log::info('api.GeneralAPI - otp response: result=SUCCESS, clientAddress='.$ip);
+            return response()->json([
+                'clientAddress' => $ip,
+                'message' => 'sms send success',
+                'result' => "SUCCESS",
+                'userId' => 0,
+            ], $code);
+        }
+
         protected function successLogin($ip, $user, $token, $code): \Illuminate\Http\JsonResponse
         {
             Log::info('api.GeneralAPI - login response: result=SUCCESS, clientAddress='.$ip.', userId=' . $user->id);
@@ -43,7 +54,6 @@ trait ApiResponser
 
         protected function successLogout($ip, $code): \Illuminate\Http\JsonResponse
         {
-
             return response()->json([
                 'clientAddress' => $ip,
                 'message' => null,

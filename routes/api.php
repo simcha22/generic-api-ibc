@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::post('/general/login', [\App\Http\Controllers\Auth\AuthController::class, 'store']);
+Route::post('/general/checkOTP', [\App\Http\Controllers\Auth\AuthController::class, 'checkOTP']);
 Route::post('/internal/generic/v2/open', [\App\Http\Controllers\Api\ExecGenericApiOpenController::class, 'index']);
 Route::post('/internal/generic/v2/open/with_sql', [\App\Http\Controllers\Api\ExecGenericApiOpenWithSqlController::class, 'index']);
 

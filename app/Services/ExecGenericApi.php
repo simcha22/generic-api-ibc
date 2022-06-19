@@ -52,12 +52,15 @@ class ExecGenericApi
     public function runQuery($query, $type, $auditId): array|bool|int
     {
         try {
-            return match ($type) {
-                "SELECT" => DB::select($query),
-                "INSERT" => DB::insert($query),
-                "UPDATE" => DB::update($query),
-                default => [],
-            };
+            if($type == "SELECT" ) {
+                return DB::select($query);
+            } elseif ($type == "INSERT") {
+                return DB::insert($query);
+            }elseif ($type ==  "UPDATE" ) {
+                return DB::update($query);
+            }else{
+                return false;
+            }
         }catch (\Exception $err ){
             log::error('Failed to run query');
             log::error($err);
