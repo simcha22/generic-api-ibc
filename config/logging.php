@@ -67,6 +67,13 @@ return [
             'days' => 14,
         ],
 
+        'daily_cache' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/server-cache.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

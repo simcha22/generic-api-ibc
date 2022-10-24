@@ -23,6 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/internal/generic/v2', [\App\Http\Controllers\Api\ExecGenericApiController::class, 'index']);
     Route::post('/generic/with_sql', [\App\Http\Controllers\Api\ExecGenericApiWithSqlController::class, 'index']);
     Route::post('/general/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
+    Route::post('dashboard/getDashboardData', [\App\Http\Controllers\Api\DashboardController::class, 'index']);
 });
 
 Route::post('/general/login', [\App\Http\Controllers\Auth\AuthController::class, 'store']);

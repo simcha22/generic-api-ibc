@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Traits;
+namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
 
@@ -88,6 +88,60 @@ trait ApiResponser
                 'result' => 'FAILED',
                 'rowsAffected' => 0,
             ], 422);
+        }
+
+        protected function successDashboard($ip, $data,$dashboardsDate, $time): \Illuminate\Http\JsonResponse
+        {
+            Log::info('api.DashboardAPI - getDashboardData response: result=SUCCESS. Execution time of generic API in milliseconds: ' . $time);
+
+            $objectsResponse = [];
+            foreach ($data as $key => $object){
+
+                if(!empty($object))
+                {
+                    $objectsResponse[] = [
+                        'columnList' => (is_array($object)? array_keys(get_object_vars($object[0])): null),
+                        'data' => (is_array($object) ? $object: null),
+                        'dashboardId' => $dashboardsDate[$key]->dashboard_id,
+                        'errorMsg'=> null,
+                        'id'=> $dashboardsDate[$key]->id,
+                        'lastUpdateTime'=> $dashboardsDate[$key]->last_updated,
+                        'refreshRate'=> $dashboardsDate[$key]->object_refresh_rate,
+                        'status'=>'SUCCESS',
+                    ];
+                }else{
+                    $objectsResponse[] = [
+                        'columnList' => null,
+                        'data' => null,
+                        'dashboardId' => $dashboardsDate[$key]->dashboard_id,
+                        'errorMsg'=> null,
+                        'id'=> $dashboardsDate[$key]->id,
+                        'lastUpdateTime'=> $dashboardsDate[$key]->last_updated,
+                        'refreshRate'=> $dashboardsDate[$key]->object_refresh_rate,
+                        'status'=>'ERROR',
+                    ];
+                }
+            }
+            return response()->json([
+                'clientAddress' => $ip,
+                'objects' => $objectsResponse,
+                'message' => null,
+                'result' => "SUCCESS",
+
+            ], 200);
+        }
+
+        protected function failedDashboard($ip, $time): \Illuminate\Http\JsonResponse
+        {
+            Log::info('api.DashboardAPI - getDashboardData response: result=FAILED, message=Failed to run Dashboard. Please see log for more information. Execution time of generic API in milliseconds: '. $time);
+            return response()->json([
+                'clientAddress' => $ip,
+                'columnList' => null,
+                'data' => null,
+                'message' => 'Failed to run Dashboard. Please see log for more information',
+                'result' => 'FAILED',
+                'rowsAffected' => 0,
+            ], 200);
         }
 
     }

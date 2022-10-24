@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Traits;
+namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -49,11 +49,13 @@ trait ApiLogging{
         Log::debug('Replace Wildcards. query=' . $query);
     }
 
-    protected function genericResponse($response){
+    protected function genericResponse($response): void
+    {
         Log::info(' api.InternalAPIUserGroupAccess - generic response: result=SUCCESS.');
     }
 
-    protected function genericNotFindError($auditId){
+    protected function genericNotFindError($auditId) : void
+    {
         log::error('Could not find generic');
 
         AuditLog::where('id', $auditId)->update([
@@ -71,5 +73,10 @@ trait ApiLogging{
             'response' => null,
             'error_msg'=> 'Failed to run query. Please see log for more information',
         ]);
+    }
+
+    protected function dashboardLogging($ip, $ids): void
+    {
+        Log::info('api.DashboardAPI - getDashboardData request: userId='.Auth::user()->id.', clientAddress='.$ip.', ids=['.implode(',',$ids).']');
     }
 }
