@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/general/okta/login', [\App\Http\Controllers\Auth\AuthOktaController::class, 'okta']);
+Route::get('/general/okta/login/redirect', [\App\Http\Controllers\Auth\AuthOktaController::class, 'store']);
+

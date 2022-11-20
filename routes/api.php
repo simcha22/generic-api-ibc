@@ -30,3 +30,6 @@ Route::post('/general/login', [\App\Http\Controllers\Auth\AuthController::class,
 Route::post('/internal/generic/v2/open', [\App\Http\Controllers\Api\ExecGenericApiOpenController::class, 'index']);
 Route::post('/internal/generic/open/with_sql', [\App\Http\Controllers\Api\ExecGenericApiOpenWithSqlController::class, 'index']);
 
+Route::get('/general/okta/login', [\App\Http\Controllers\Auth\AuthOktaController::class, 'okta']);
+Route::get('/general/okta/login/redirect', [\App\Http\Controllers\Auth\AuthOktaController::class, 'store']);
+
